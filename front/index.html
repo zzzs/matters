@@ -1,69 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Backbone.js Todos</title>
-  <link rel="stylesheet" href="todos.css"/>
+	<meta charset="utf-8">
+	<title>Matters</title>
+	<link rel="stylesheet" href="bootstrap/bootstrap.min.css"/>
+	<link rel="stylesheet" href="confirm/jquery-confirm.min.css"/>
+	<link rel="stylesheet" href="css/matters.css"/>
 </head>
 
 <body>
+	<div class="container-fluid">
+		<div class="leftcon">
+			<h1>Matters</h1>
+			<input id="add-matter" type="text" placeholder="What is the matter?">
+			<input id="search-matter" type="text" placeholder="Try to search matters">
 
-  <div id="todoapp">
+			<div id="credits">
+				Created by zxl
+				<br />
+				<a href="https://github.com/zzzs/todos">learn more here</a>.
+			</div>
+		</div>
 
-    <header>
-      <h1>Todos</h1>
-      <input id="new-todo" type="text" placeholder="What needs to be done?">
-    </header>
+		<div class="rightcon">
+			<ul id="matter-list">
 
-    <section id="main">
-      <input id="toggle-all" type="checkbox">
-      <label for="toggle-all">Mark all as complete</label>
-      <ul id="todo-list"></ul>
-    </section>
+			<!-- 	<li class="con_item">
+				<div class="title">
+					<h2>角度思考的精神的军事科技</h2>
+				</div>
 
-    <footer>
-      <a id="clear-completed">Clear completed</a>
-      <div id="todo-count"></div>
-    </footer>
+				<div class="operate">
+					<a class="detail glyphicon glyphicon-search"></a>
+					<a class="edit glyphicon glyphicon-edit"></a>
+					<a class="remove glyphicon glyphicon-remove"></a>
+				</div>
+				<span>2016-09-09</span>
+			</li> -->
 
-  </div>
+			</ul>
+		</div>
+	</div>
+	<div id="matterModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="myModalLabel"></h4>
+					<input type="text" name="title" value="" style="display: none">
+				</div>
+				<div class="modal-body">
+					<input type="text" name="reply" value="" style="display: none">
+				</div>
+				<div class="modal-footer" style="display: none">
+					<button type="button" class="btn" data-dismiss="modal">Close</button>
+					<button id="edit-matter" type="button" class="btn btn-default">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-  <div id="instructions">
-    Double-click to edit a todo.
-  </div>
 
-  <div id="credits">
-    Created by
-    <br />
-    <a href="http://jgn.me/">J&eacute;r&ocirc;me Gravel-Niquet</a>.
-    <br />Rewritten by: <a href="http://addyosmani.github.com/todomvc">TodoMVC</a>.
-  </div>
+	<script src="js/json2.js"></script>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/underscore.js"></script>
+	<script src="js/backbone.js"></script>
+	<script src="bootstrap/bootstrap.min.js"></script>
+	<script src="confirm/jquery-confirm.min.js"></script>
+	<script src="js/backbone.localStorage.js"></script>
+	<script src="js/matters.js"></script>
 
-  <script src="json2.js"></script>
-  <script src="jquery.js"></script>
-  <script src="underscore.js"></script>
-  <script src="backbone.js"></script>
-  <script src="backbone.localStorage.js"></script>
-  <script src="todos.js"></script>
+	<!-- Templates -->
+	<script type="text/template" id="item-template">
 
-  <!-- Templates -->
+		<div class="title">
+			<h2><%- title %></h2>
+		</div>
+		<div class="operate">
+			<a title="brower" class="detail glyphicon glyphicon-search"></a>
+			<a title="edit" class="edit glyphicon glyphicon-edit"></a>
+			<a title="reply" class="reply glyphicon glyphicon-user"></a>
+			<a title="remove" class="remove glyphicon glyphicon-remove"></a>
+		</div>
+		<span><%- date %></span>
 
-  <script type="text/template" id="item-template">
-    <div class="view">
-      <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
-      <label><%- title %></label>
-      <a class="destroy"></a>
-    </div>
-    <input class="edit" type="text" value="<%- title %>" />
-  </script>
+	</script>
 
-  <script type="text/template" id="stats-template">
-    <% if (done) { %>
-      <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
-    <% } %>
-    <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
-  </script>
+	<script type="text/template" id="reply-template">
+		<%if(reply.length === 0){%>
+		<div id="replylist">暂无回复</div>
+		<%} else {%>
+		<ul id="replylist">
+			<% _.each(reply,function(item){ %>
+			<li><%= item.con %></li>
+			<% }) %>
+		</ul>
+		<%}%>
 
-<a href="#help" >help</a>
-  </body>
+	</script>
+</body>
 </html>
