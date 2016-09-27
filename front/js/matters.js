@@ -71,14 +71,11 @@ $(function(){
         },
         model: null,
         initialize: function() {
-            // this.listenTo(this.model, 'change', this.render);
-
             this.title = this.$(".modal-title");
             this.titleinput = this.$("input[name='title']");
             this.body = this.$(".modal-body");
             this.replyinput = this.$("input[name='reply']");
             this.footer = this.$(".modal-footer");
-
 
             this.$el.on('hidden.bs.modal', this.hidden);
             this.render();
@@ -250,7 +247,6 @@ $(function(){
         events: {
         	"keypress #add-matter":  "addMatter",
         	"keypress #search-matter": "searchMatter"
-        	// "click #toggle-all": "toggleAllComplete"
         },
 
         // At initialization we bind to the relevant events on the `Matters`
@@ -258,7 +254,9 @@ $(function(){
         // loading any preexisting matters that might be saved in *localStorage*.
         initialize: function() {
 
-        	this.input = this.$("#add-matter");
+        	this.addInput = this.$("#add-matter");
+            this.searchInput = this.$("#search-matter");
+            this.matterList = this.$("#matter-list");
 
         	this.listenTo(Matters, 'add', this.addOne);
         	this.listenTo(Matters, 'reset', this.addAll);
@@ -270,14 +268,13 @@ $(function(){
         // Re-rendering the App just means refreshing the statistics -- the rest
         // of the app doesn't change.
         render: function() {
-
         },
 
         // Add a single matter item to the list by creating a view for it, and
         // appending its element to the `<ul>`.
         addOne: function(matter) {
         	var view = new MatterView({model: matter});
-        	this.$("#matter-list").append(view.render().el);
+        	this.matterList.append(view.render().el);
         },
 
         // Add all items in the **Matters** collection at once.
@@ -289,21 +286,24 @@ $(function(){
         // persisting it to *localStorage*.
         addMatter: function(e) {
         	if (e.keyCode != 13) return;
-        	if (!this.input.val()) return;
+        	if (!this.addInput.val()) return;
 
-        	Matters.create({title: this.input.val()});
-        	this.input.val('');
+        	Matters.create({title: this.addInput.val()});
+        	this.addInput.val('');
         },
-        searchMatter: function() {
-        	// setTimeout(function() {
-        	// }, 1);
+        searchMatter: function(e) {
+            if (e.keyCode != 13) return;
 
-        	var aaa= Matters.where({title: "dddd"});
-        	// var query = _(function() {
+            this.matterList.empty();
 
-        	// }).debounce(200);
-
-        	// $('#search').bind('keypress', query);
+            if (!this.searchInput.val()) {
+                Matters.reset();
+                Matters.fetch();
+            }
+        	var selectMatters= Matters.where({title: this.searchInput.val()});
+            if (selectMatters.length === 0) return;
+            Matters.reset(selectMatters);
+            this.searchInput.val('');
         }
 
     });
