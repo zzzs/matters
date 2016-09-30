@@ -118,6 +118,10 @@ $(function(){
         },
         showBody: function() {
            this.body.append(this.replytemplate({reply: this.modaldata.reply}));
+           this.body.find("label").hide();
+        },
+        showBodyLabel: function() {
+           this.body.find("label").show();
         },
         showFooter: function() {
             this.footer.show();
@@ -208,6 +212,7 @@ $(function(){
         	Modal.show();
         	Modal.showTitle();
         	Modal.showBody();
+            Modal.showBodyLabel();
         	Modal.showReplyinput();
         	Modal.showFooter();
         },
